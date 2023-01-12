@@ -90,8 +90,6 @@ h6 {
   margin: 0 auto;
 }
 
-
-
 .main-logo-icon {
   margin-right: 2rem;
 }
@@ -180,7 +178,7 @@ h6 {
 /* Pegando só a TAG A dessa classe para aplicar estilo. */
 .recipe-title-container a {
   text-decoration: none;
-  color: var(--color-primary-dark)
+  color: var(--color-primary-dark);
 }
 
 .recipe-author {
@@ -300,10 +298,19 @@ h6 {
   text-align: center;
 }
 
-.m-x{
+.m-x {
   margin: 0 var(--spacing-gutter-medium);
 }
 
-.m-y{
+.m-y {
   margin: var(--spacing-gutter-medium) 0;
+}
+
+.container_img img {
+  max-width: 16px;
+  max-height: 16px;
+}
+
+.container_localizar {
+  background: red;
 }

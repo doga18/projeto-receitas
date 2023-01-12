@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 # Create your models here.
 # Create my models here.
@@ -26,7 +26,7 @@ class Author(models.Model):
 class Recipes(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(max_length=165)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(max_length=65)
     servings = models.IntegerField()

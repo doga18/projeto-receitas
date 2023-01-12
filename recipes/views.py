@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404
 from django.http import HttpResponse
+from django.shortcuts import get_list_or_404, get_object_or_404, render
+
 # from .utils.recipes.factory import make_recipe
 from recipes.models import Recipes
 
@@ -19,7 +20,7 @@ def home(request):
     # Simplificando a Consulta acima.
     recipes = Recipes.objects.filter(
         is_published=True
-        ).order_by('-id')
+    ).order_by('-id')
     """ valor = Recipes._meta.get_fields()[14]
     print(valor)
     b = recipes.first().category
@@ -97,3 +98,7 @@ def contato(request):
     # para ficar mais claro, vamos criar um namespace e colocar o endereço com
     # namespace para evitar confusão.
     return render(request, 'pesquise_aqui/temp.html', status=200)
+
+
+def search(request):
+    return render(request, 'recipes/pages/search.html')

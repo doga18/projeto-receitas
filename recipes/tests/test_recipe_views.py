@@ -175,3 +175,17 @@ class RecipeViewsTest(RecipeTestBase):
         # Check if category contains that name give on make_recipe with category. # noqa: 501
         self.assertIn(needed_title, content)
         # Check if a recipe is only one, with a function Equals. # noqa: 501
+
+    def teste_recipe_search_url_is_correct(self):
+        # Podemos simplificar as linhas abaixo, colocando tudo isso em uma variável, segue exemplo # noqa: 501
+        # url = reverse('recipes:search')
+        # self.assertEquals(url, '/recipes/search/')
+        # Fazer falhar e mostrar a variável URL
+        # self.fail(url)
+        url_resolvida = resolve(reverse('recipes:search'))
+        self.assertIs(url_resolvida.func, views.search)
+
+    def test_recipe_search_loads_correct_template(self):
+        resposta = self.client.get(reverse('recipes:search'))
+        self.assertTemplateUsed(resposta, 'recipes/pages/search.html')
+
