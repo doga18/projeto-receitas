@@ -102,3 +102,4 @@ def contato(request):
 
 def search(request):
     return render(request, 'recipes/pages/search.html')
+    # atualizando
