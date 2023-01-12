@@ -25,7 +25,7 @@ def home(request):
     b = recipes.first().category
     a = recipes.last().category.id
     print(a, b) """
-    return render(request, 'recipes/pages/home.html', status=201, context={
+    return render(request, 'recipes/pages/home.html', status=200, context={
         'name': 'Receitas Brasileiras',
         # 'recipes': [make_recipe() for _ in range(3)],
         'recipes': recipes,
