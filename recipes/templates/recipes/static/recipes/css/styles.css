@@ -250,6 +250,16 @@ h6 {
   box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+.main-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-primary-dark);
+  color: var(--color-alert-dark);
+  padding: var(--spacing-gutter-large);
+  text-decoration: none;
+}
+
 .main-footer {
   display: flex;
   align-items: center;
@@ -313,4 +323,13 @@ h6 {
 
 .container_localizar {
   background: red;
+}
+
+.new-recipe {
+  color: var(--color-primary);
+  background: var(--color-primary-dark);
+  display: block;
+  text-decoration: none;
+  text-align: center;  
+  transition: all 300ms ease-in-out;
 }

@@ -46,9 +46,10 @@ class RecipeModelTest(RecipeTestBase):
         with self.assertRaises(ValidationError):
             self.recipe.full_clean()
 
-    def test_recipe_preparation_step_is_html_false_by_default(self):
+    def test_recipe_preparation_step_is_html_is_false_by_default(self):
         recipe = self.make_recipes_no_defaults()
         self.assertFalse(
             recipe.preparation_steps_is_html,
             msg='Recipe preparations is not False, eu mesmo escrevi.',
         )
+        
