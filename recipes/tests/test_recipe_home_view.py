@@ -89,4 +89,4 @@ class RecipeHomeViewsTest(RecipeTestBase):
         response_1 = self.client.get(f'{search_url}?q={title_1}')
         response_2 = self.client.get(f'{search_url}?q={title_2}')
         response_both = self.client.get(f'{search_url}?q=this')
-        print(response_1, response_2, response_both)
+        print(response_1, response_2, response_both, recipe_1, recipe_1, recipe_2) # noqa: 501

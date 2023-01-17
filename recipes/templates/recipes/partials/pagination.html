@@ -1,0 +1,27 @@
+{% if recipes.has_other_pages %}
+
+<div class="container paginacao">
+  <div class="paginacao-content">
+
+  {% if paginacao_range.first_page_out_of_range %}
+    <a href="?page=1{{ additional_url_query }}" class="page-link page-item">1</a>
+    <span class="page-item">...</span>
+  {% endif %}
+
+  {% for page in paginacao_range.pagination %}
+    {% if paginacao_range.current_page == page %}
+      <a href="?page={{page}}" class="page-link page-item page-current">{{page}}</a>
+    {% else %}
+    <a href="?page={{page}}{{ additional_url_query }}" class="page-link page-item">{{page}}</a>
+    {% endif %}    
+  {% endfor %}
+
+  {% if paginacao_range.last_page_out_of_range %}
+    <span class="page-item">...</span>
+    <a href="?page={{paginacao_range.total_pages}}{{ additional_url_query }}" class="page-link page-item">{{paginacao_range.total_pages}}</a>    
+  {% endif %}
+
+</div>
+</div>
+
+{% endif %}

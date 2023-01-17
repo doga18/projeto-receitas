@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 # O Q serve para informar ao django que você quer o and ou or na busca.
 from django.db.models import Q
+from .tests.generator_pagination import make_pagination
 
 # from .utils.recipes.factory import make_recipe
 from recipes.models import Recipes
@@ -12,6 +13,9 @@ from recipes.models import Recipes
 
 # Nome do Site.
 name_of_site = 'Receitas Brasileiras'
+
+# POR PÁGINAS
+PER_PAGES = 3
 
 
 def home(request):
@@ -26,15 +30,23 @@ def home(request):
     recipes = Recipes.objects.filter(
         is_published=True
     ).order_by('-id')
+
+    # Oque ele faz, ele tenta pegar a chave page e o seu valor, caso não tenha, usa o valor 1 # noqa: 501
+    
     """ valor = Recipes._meta.get_fields()[14]
     print(valor)
     b = recipes.first().category
     a = recipes.last().category.id
     print(a, b) """
+
+    # Usando a função de Paginação
+    page_obj, paginacao_range = make_pagination(request, recipes, PER_PAGES)
+
     return render(request, 'recipes/pages/home.html', status=200, context={
         'name': name_of_site,
         # 'recipes': [make_recipe() for _ in range(3)],
-        'recipes': recipes,
+        'recipes': page_obj,
+        'paginacao_range': paginacao_range
     })
 
 
@@ -65,10 +77,13 @@ def category(request, category_id):
         ).order_by('-id')
     )
 
+    page_obj, paginacao_range = make_pagination(request, recipes, PER_PAGES)
+
     return render(request, 'recipes/pages/category.html', context={
         'name': name_of_site,
         'title': f'{recipes[0].category.name} | Recipes',
-        'recipes': recipes,
+        'recipes': page_obj,
+        'paginacao_range': paginacao_range
     })
 
 
@@ -128,11 +143,15 @@ def search(request):
     if not search_term:
         raise Http404()
 
+    page_obj, paginacao_range = make_pagination(request, consultando_receitas, PER_PAGES) # noqa: 501
+
     return render(request, 'recipes/pages/search.html', {
         # O par de Chaves é o valor que a Página está esperando receber, e o valor é a variável definida nessa função. # noqa: 501
-        'recipes': consultando_receitas,
+        'recipes': page_obj,
         'search_term': search_term,
         'name': name_of_site,
         'page_title': f'Resultados para {search_term} no site ',
+        'paginacao_range': paginacao_range,
+        'additional_url_query': f'&q={search_term}',
     })
     # atualizando
