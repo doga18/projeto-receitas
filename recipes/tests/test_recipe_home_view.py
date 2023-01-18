@@ -1,6 +1,7 @@
 from recipes.models import Recipes
 from django.urls import reverse
 from .test_recipe_base import RecipeTestBase
+from unittest.mock import patch
 
 
 class RecipeHomeViewsTest(RecipeTestBase):
@@ -68,7 +69,29 @@ class RecipeHomeViewsTest(RecipeTestBase):
             '<h2>Sem Receitas Cadastradas no momento.</h2>',
             response.content.decode('utf-8')
         )
-    
+
+    # O Patch serve para pegar um valor de uma variável global, alterar o valor dela para o teste e depois voltar o valor dela que estava antes. # noqa: 501
+    # Assim ao alterar o valor, não quebra os demais testes. # noqa: 501
+    # Esse é o modo usando decorator.
+    # @patch('recipes.views.PER_PAGES', new=3)
+    def test_recipe_home_is_paginated(self):
+
+        # Esse teste, vê se o is_published for false não mostre.
+        for i in range(9):
+            kwargs = {'slug': f'r{i}', 'author_data': {'username': f'u{i}'}}
+            self.make_recipe(**kwargs)
+
+        # Aqui seria o teste via With.
+        with patch('recipes.views.PER_PAGES', new=3):
+            response = self.client.get(reverse('recipes:home'))
+            recipes = response.context['recipes']
+            paginator = recipes.paginator
+
+            self.assertEqual(paginator.num_pages, 3)
+            self.assertEqual(len(paginator.get_page(1), 3))
+            self.assertEqual(len(paginator.get_page(2), 3))
+            self.assertEqual(len(paginator.get_page(3), 2))            
+
     def test_recipe_search_can_find_recipe_by_title(self):
         title_1 = 'This is recipes one'
         title_2 = 'This is recipes two'

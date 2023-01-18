@@ -1,21 +1,27 @@
-from django.http import HttpResponse, Http404
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+# Para importar variáveis de ambiente, é necessário importar o OS. Continua na linha 21 # noqa: 501
+import os
+
 # O Q serve para informar ao django que você quer o and ou or na busca.
 from django.db.models import Q
-from .tests.generator_pagination import make_pagination
+from django.http import Http404, HttpResponse
+from django.shortcuts import get_list_or_404, get_object_or_404, render
 
 # from .utils.recipes.factory import make_recipe
 from recipes.models import Recipes
+
+from .tests.generator_pagination import make_pagination
 
 # Esse está buscando dentro da namespace, recipes, em templates.
 # No render também, você pode passar os Status HTTP, exemplo de como passar 201
 # Também é possível enviar variáveis no render, exemplo.
 
 # Nome do Site.
-name_of_site = 'Receitas Brasileiras'
+name_of_site = os.environ.get('NAME_OF_SITE')
 
 # POR PÁGINAS
-PER_PAGES = 3
+
+# Continuando a parte de importações, depois importar a variável, se não tiver nada na variável, use o valor 6 # noqa: 501
+PER_PAGES = os.environ.get('PER_PAGE', 6)
 
 
 def home(request):
@@ -32,12 +38,15 @@ def home(request):
     ).order_by('-id')
 
     # Oque ele faz, ele tenta pegar a chave page e o seu valor, caso não tenha, usa o valor 1 # noqa: 501
-    
+
     """ valor = Recipes._meta.get_fields()[14]
     print(valor)
     b = recipes.first().category
     a = recipes.last().category.id
     print(a, b) """
+
+    # messages.info(request, 'Epa, vamos pesquisar. eu sou info')
+    # messages.warning(request, 'Epa, vamos pesquisar. eu sou warning')
 
     # Usando a função de Paginação
     page_obj, paginacao_range = make_pagination(request, recipes, PER_PAGES)
@@ -46,7 +55,8 @@ def home(request):
         'name': name_of_site,
         # 'recipes': [make_recipe() for _ in range(3)],
         'recipes': page_obj,
-        'paginacao_range': paginacao_range
+        'paginacao_range': paginacao_range,
+        'show': 1,
     })
 
 
@@ -120,11 +130,11 @@ def contato(request):
     return render(request, 'pesquise_aqui/temp.html', status=200)
 
 
-def search(request):
+def search(request):    
     # Aqui estamos pegando o valor procurando, como coloquei o nome de Q, recebo o mesmo aqui. # noqa: 501
     search_term = request.GET.get('q', '').strip()
     consultando_receitas = Recipes.objects.filter(
-        # Colocando = ele vai procurar o termo exatamente igual oque não é interessante. # noqa: 501        
+        # Colocando = ele vai procurar o termo exatamente igual oque não é interessante. # noqa: 501
         # title=search_term,
         # Onde a ideia seria usar o termo de Like no sql, segue exemplo de como funcionaria. # noqa: 501
         # Para procurar o termo independentemente se há letras maiúsculas ou minúsculas, coloque um i na frente de contains. # noqa : 501
@@ -143,7 +153,7 @@ def search(request):
     if not search_term:
         raise Http404()
 
-    page_obj, paginacao_range = make_pagination(request, consultando_receitas, PER_PAGES) # noqa: 501
+    page_obj, paginacao_range = make_pagination(request, consultando_receitas, PER_PAGES)  # noqa: 501
 
     return render(request, 'recipes/pages/search.html', {
         # O par de Chaves é o valor que a Página está esperando receber, e o valor é a variável definida nessa função. # noqa: 501
