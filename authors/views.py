@@ -2,8 +2,9 @@ import os
 
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django.contrib import messages
 
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 
 # Nome do Site.
 name_of_site = os.environ.get('NAME_OF_SITE')
@@ -30,8 +31,35 @@ def register_create(request):
 
     POST = request.POST
     request.session['register_form_data'] = POST
-    form = RegisterForm(request.POST)  # noqa: F841
+    form = RegisterForm(POST)  # noqa: F841
 
     print(request.session['register_form_data'])
 
+    if form.is_valid():
+        # Este exemplo, mas com que 'Seguremos os dados do form' para fazer algo. # noqa: 501
+        # Ele finge que salva, mas não commit, então não salva.
+        # Isso serve para quando você precisa, definir algum valor também à mais antes de salvar de fato. # noqa: 501
+        # Ex
+        # dados_salvos = form.save(commit=False)
+        form.save()
+        messages.success(request, 'Seu cadastro foi realizado com sucesso, agora Realize seu Login') # noqa: 501
+
+        # Limpar os dados do formulário.
+        del (request.session['register_form_data'])
+        # Após o cadastro, podemos voltar para o Login.
+
     return redirect('authors:register')
+
+
+def do_login(request):
+    # if not request.POST:
+    #    raise Http404()
+
+    POST = request.POST
+    request.session['login_form_data'] = POST
+    login_form = LoginForm(POST)
+
+    return render(request, 'authors/pages/login_view.html', context={
+        'name': 'Efetue seu Login',
+        'form': login_form
+    })

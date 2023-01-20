@@ -1,4 +1,4 @@
-{% extends 'global/base.html' %}
+{% extends 'global/base_no_search.html' %}
 
 {% block title %}Register |{% endblock title %}
 
@@ -6,10 +6,15 @@
 
   <div class="main-content center container">
     {% comment %} Mostrando qual o numero de sessões que tem nessa página. {% endcomment %}
-    <h2>Número de Sessões: {{ request.session.number }}</h2>    
+    {% comment %} <h2>Número de Sessões: {{ request.session.number }}</h2>     {% endcomment %}
+    <div class="container main-logo-text">
+      <h2>Cadastre sua conta</h2>
+    </div>
   </div>
+  
 
   <div class="main-content container">
+    {% include 'recipes/partials/messages.html' %}
     <form action="{% url 'authors:create' %}" method="POST">
       {% csrf_token %}
       <div class="form-content form-content-grid">
@@ -27,6 +32,21 @@
           </div>         
         {% endfor %}
       </div>
+
+        {% if form.errors %}
+          <div class="form-content form-content-grid">
+            <div class="form-group">
+              <div class="message message-error">
+                Existem erros no cadastro, corrija antes de continuar.                
+                
+                 {% comment %}Aqui você vê os erros que aparecem na tela, como isso não é interessante para senha, não mostramos diretamente. {% endcomment %}
+                {% comment %}  {{ form.errors }} {% endcomment %}
+
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
       <div class="form-content form-content-grid">
         <div class="form-group">
           <button type="submit">Enviar</button>        
