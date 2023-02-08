@@ -36,6 +36,9 @@ class RegisterForm(forms.ModelForm):
         required=True,
         label='Confirme sua senha',
         widget=forms.PasswordInput(attrs={
+            # Como acima, também existe um método para adicionar um placeholder, esses 2 valores, são adicionados. # noqa: 501
+            # Por isso sempre temos que usar um método ou outro, e não os dois # noqa: 501
+            # o Resultado disso, seria = (Repita sua senha ex: Abc123456) ou seja a soma dos dois. # noqa: 501
             'placeholder': 'Repita sua senha',
             'label': 'Confirme sua senha',
         }),
@@ -54,8 +57,11 @@ class RegisterForm(forms.ModelForm):
         # self.fields['username'].widget.attrs['placeholder'] = 'adasd'
         add_placeholder(self.fields['email'], 'Insira aqui seu e-mail')
         add_placeholder(self.fields['first_name'], 'ex: Pedro')
-        add_placeholder(self.fields['last_name'], 'ex: Pinheiro')        
-        add_attr(self.fields['password'], 'label', 'Digite novamente sua senha.')  # noqa: 501
+        add_placeholder(self.fields['last_name'], 'ex: Pinheiro')
+        add_placeholder(self.fields['password'], 'ex: Abc123456')
+        # No password 2, irá contar o campo sobreescrito, no passo acima.
+        add_placeholder(self.fields['password2'], 'ex: Abc123456')
+        # add_attr(self.fields['password'], 'label', 'Digite novamente sua senha.')  # noqa: 501
 
     # A Meta é necessária para passar meta dados para o django.
     class Meta:
@@ -105,6 +111,9 @@ class RegisterForm(forms.ModelForm):
             }),
             # password field
             'password': forms.PasswordInput(attrs={
+                # Como acima, também existe um método para adicionar um placeholder, esses 2 valores, são adicionados. # noqa: 501
+                # Por isso sempre temos que usar um método ou outro, e não os dois # noqa: 501
+                # o Resultado disso, seria = (Insira sua senha ex: Abc123456) ou seja a soma dos dois. # noqa: 501
                 'placeholder': 'Insira sua senha',
             })
         }
@@ -125,6 +134,18 @@ class RegisterForm(forms.ModelForm):
             )
 
         return data
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '')
+        # O Exists no final, ele traz True se o filtro de campo email for igual a variável email  # noqa: 501
+        exists = User.objects.filter(email=email).exists()
+
+        if exists:
+            raise ValidationError(
+                'User e-mail is already registered', code='invalid_email',
+                )
+
+        return email
 
     def clean_first_name(self):
         data = self.cleaned_data.get('first_name')

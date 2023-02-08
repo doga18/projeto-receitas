@@ -1,8 +1,9 @@
 import os
 
 from django.http import Http404
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render 
 from django.contrib import messages
+from django.urls import reverse
 
 from .forms import RegisterForm, LoginForm
 
@@ -20,6 +21,7 @@ def register_view(request):
     return render(request, 'authors/pages/register_view.html', status=200, context={  # noqa: 501
         'name': name_of_site,
         'form': form,
+        'form_action': reverse('authors:create'),
 
     })
 
@@ -41,7 +43,16 @@ def register_create(request):
         # Isso serve para quando você precisa, definir algum valor também à mais antes de salvar de fato. # noqa: 501
         # Ex
         # dados_salvos = form.save(commit=False)
-        form.save()
+        # Lembre-se que o commit=False serve para você tratar os dados que vieram antes de salvar. # noqa: 501
+        # form.save(commit=False)
+        # Determinando o save a uma variável para trabalhar esses dados.
+        user = form.save(commit=False)
+        # O user.password vem como String.
+        # O set_password é uma função de criptografar a senha, após isso, salvamos. # noqa: 501
+        user.set_password(user.password)
+        
+        # Salvo de fato.
+        user.save()
         messages.success(request, 'Seu cadastro foi realizado com sucesso, agora Realize seu Login') # noqa: 501
 
         # Limpar os dados do formulário.

@@ -128,7 +128,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/recipes/'
 STATICFILES_DIRS = [
-    BASE_DIR / "recipes/templates/recipes/static"
+    BASE_DIR / "recipes/templates/recipes/static",
+    BASE_DIR / "base_templates/",
+    BASE_DIR / "base_static",
 ]
 
 MEDIA_URL = '/media/'

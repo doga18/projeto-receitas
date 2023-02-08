@@ -137,7 +137,7 @@ def search(request):
         # Colocando = ele vai procurar o termo exatamente igual oque não é interessante. # noqa: 501
         # title=search_term,
         # Onde a ideia seria usar o termo de Like no sql, segue exemplo de como funcionaria. # noqa: 501
-        # Para procurar o termo independentemente se há letras maiúsculas ou minúsculas, coloque um i na frente de contains. # noqa : 501
+        # Para procurar o termo independentemente se há letras maiúsculas ou minúsculas, coloque um i na frente de contains. # noqa: 501
         # O método usado abaixo equivale a procura por termos com ou (OR) ao invés de E (AND) # noqa: 501
         # Quando envolvemos o Ou todo por um Q podemos também colocar a condicional E da seguinte forma. # noqa: 501
         Q(

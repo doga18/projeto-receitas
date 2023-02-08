@@ -1,0 +1,113 @@
+{% block panel %}
+<div class="container">
+  <br>      
+      <br>
+        {% for info in server_client %}
+          <div class="container">
+            <div class="container">
+            <span class="display-5">
+              Conecte antes de continar
+            </span>
+            <br>
+          </div>
+          <div class="container">
+            <span class="display-5">
+             
+            </span>
+            <br>
+          </div>
+            <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">
+              Realizar
+            </button>            
+              <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="staticBackdropLabel">Confira os dados de conexão</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close">a</button>
+                </div>
+                <div class="offcanvas-body">
+                  <form action="{% url 'connect_sv' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label for="ip_server" class="form-label">Endereço do Servidor</label>
+                        <input type="text" name="ip_server" class="form-control" id="ip_server" value="{{info.ip_server}}" placeholder="{{info.ip_server}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="user_ssh" class="form-label">Usuário de Acesso</label>
+                        <input type="text" name="user_ssh" class="form-control" id="user_ssh" value="{{info.user_ssh}}" placeholder="{{info.user_ssh}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="pass_ssh" class="form-label">Senha de acesso</label>
+                        <input type="text" name="pass_ssh" class="form-control" id="pass_ssh" value="{{info.pass_ssh}}" placeholder="{{info.pass_ssh}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="port_client" class="form-label">Porta de Acesso SSH</label>
+                        <input type="text" class="form-control" name="port_client" id="port_client" value="{{info.port_client}}" placeholder="{{info.port_client}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="port_client" class="form-label">Comando Linux</label>
+                        <input type="text" class="form-control" name="command" id="port_client" value="cat /etc/redhat-release" placeholder="Ex: cat /etc/redhat-release">
+                      </div>
+                      <tr><br>
+                      <td colspan="2">
+                        <button type="submit" class="btn btn-primary">Conectar</button>
+                      </td>
+                    </tr>
+                  </form>
+                </div>
+              </div>
+            </div>              
+          {% endfor %}
+</div>
+<div class="container">
+
+  <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Confira os dados de conexão</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {% for info in server_client %}
+                  <form action="{% url 'connect_sv' %}" method="POST">
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label for="ip_server" class="form-label">Endereço do Servidor</label>
+                        <input type="text" disabled name="ip_server" class="form-control" id="ip_server" value="{{info.ip_server}}" placeholder="{{info.ip_server}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="user_ssh" class="form-label">Usuário de Acesso</label>
+                        <input type="text" disabled name="user_ssh" class="form-control" id="user_ssh" value="{{info.user_ssh}}" placeholder="{{info.user_ssh}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="pass_ssh" class="form-label">Senha de acesso</label>
+                        <input type="text" disabled name="pass_ssh" class="form-control" id="pass_ssh" value="{{info.pass_ssh}}" placeholder="{{info.pass_ssh}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="port_client" class="form-label">Porta de Acesso SSH</label>
+                        <input type="text" disabled class="form-control" name="port_client" id="port_client" value="{{info.port_client}}" placeholder="{{info.port_client}}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="port_client" class="form-label">Comando Linux</label>
+                        <input type="text" disabled class="form-control" name="command" id="port_client" value="cat /etc/redhat-release" placeholder="Ex: cat /etc/redhat-release">
+                      </div>
+                      <tr><br>
+                      <td colspan="2">
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-bs-target="#exampleModalToggle2" data-bs-toggle="modal">Conectar</button>
+                      </div>
+                      </td>
+                    </tr>
+                  </form>
+                  {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+ 
+
+
+</div>
+{% endblock %}
